@@ -3,30 +3,61 @@
 <head>
 <title>QR Video Scanner</title>
 <script src="https://unpkg.com/html5-qrcode"></script>
+
+<style>
+body{
+font-family:Arial;
+text-align:center;
+}
+
+#reader{
+width:300px;
+margin:auto;
+}
+
+#videoContainer{
+margin-top:20px;
+display:none;
+}
+
+video{
+width:350px;
+border-radius:10px;
+}
+</style>
+
 </head>
 
 <body>
 
 <h2>Scan QR to Play Video</h2>
 
-<div id="reader" style="width:300px;"></div>
+<div id="reader"></div>
 
-<video id="videoPlayer" width="400" controls autoplay></video>
+<div id="videoContainer">
+<video id="videoPlayer" controls autoplay></video>
+</div>
 
 <script>
 
 function onScanSuccess(decodedText) {
 
-    console.log("QR Content:", decodedText);
+console.log("Decoded:", decodedText);
 
-    let video = document.getElementById("videoPlayer");
+let video = document.getElementById("videoPlayer");
+let container = document.getElementById("videoContainer");
 
-    video.src = decodedText;
+container.style.display = "block";
+
+video.src = decodedText;
+video.load();
+video.play().catch(()=>{});
+
 }
 
 let scanner = new Html5QrcodeScanner(
-    "reader",
-    { fps: 10, qrbox: 250 }
+"reader",
+{ fps:10, qrbox:250 }
 );
 
 scanner.render(onScanSuccess);
